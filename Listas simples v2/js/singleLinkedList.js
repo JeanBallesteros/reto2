@@ -341,23 +341,19 @@ instClass.añadirNodoI(1);
 instClass.añadirNodoI(7);
 instClass.añadirNodoI(8);
 instClass.añadirNodoI(9);
-
+instClass.removerNodoPorPosicion(1); /* Elimina nodo con valor 3 */
+instClass.insertarNodoPorPosicion("Nuevo nodo", 0);
+instClass.removerNodoPorValor(3);
 console.log(instClass);
 /* instClass.eliminarNodoI();
 instClass.eliminarNodoF(); 
 instClass.modificarValorNodo(1, "Dos");*/
-instClass.removerNodoPorPosicion(1); /* Elimina nodo con valor 3 */
-console.log(instClass);
-
-instClass.insertarNodoPorPosicion("Nuevo nodo", 0);
-instClass.removerNodoPorValor(3);
 instClass.imprimirArrayList();
 /* instClass.invertirNodos();
 console.log(instClass); */
 
 function opciones() {
     let seleccion = document.getElementById("functionSelected").value;
-    let nono = "¡Seleccione si al final o al inicio!";
     
     if ((seleccion === "1") && (document.getElementById("aggInicio").checked)){
         document.getElementById("nodoPorDefault").innerHTML = "";
@@ -390,7 +386,7 @@ function opciones() {
         document.getElementById("posicionN").value = "";
     }else if((seleccion === "4")){
         document.getElementById("nodoPorDefault").innerHTML = "";
-        instClass.removerNodoPorPosicion(document.getElementById("posicionN").value);
+        instClass.removerNodoPorPosicion(parseInt(document.getElementById("posicionN").value));
         instClass.imprimirArrayList();
         console.log(instClass);
         document.getElementById("valorN").value = "";
