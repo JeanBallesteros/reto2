@@ -113,11 +113,20 @@ function onChange(event){
 }
 
 /* Lectura del contenido del archivo */
+
+const arregloTxt = [];
 function onLoad(){
     let contenidoTxt = infoArchivo.result;
     let lecturaLineaPorLinea = contenidoTxt.split('\n');
     let contenido = '';
     contenido += lecturaLineaPorLinea;
+    
+    for (let i = 0; i < lecturaLineaPorLinea.length; i++) {
+        lecturaLineaPorLinea[i]; 
+        arregloTxt.push(lecturaLineaPorLinea[i]);
+    }
+    
+    console.log(arregloTxt);
     document.getElementById('ver').innerHTML = contenido;
 }
 
@@ -133,7 +142,9 @@ function añadirNodosCampos(){
     for (let i = 0; i < arregloImages.length; i++){
         instClass.añadirNodoF(arregloImages[i]);
     }
-    instClass.añadirNodoF(txt);
+    for (let i = 0; i < arregloTxt.length; i++){
+        instClass.añadirNodoF(arregloTxt[i]);
+    }
     instClass.imprimirArrayList();
 }
 
