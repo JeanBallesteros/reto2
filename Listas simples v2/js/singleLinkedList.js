@@ -1,4 +1,4 @@
-/* Desactivar o habilitar input y radiobutton según select */
+/* Desactivar o habilitar inputs y radiobutton según select */
 $( function() {
     $("#functionSelected").change( function() {
         if ($(this).val() === "1") {
@@ -46,7 +46,39 @@ const capturaValorInputAnonima = function() {
     document.getElementById("nodosIngresados").innerHTML = valoresNodos;
 };
 
-/* const capturaValorInputFlecha = () => {
+/* Función para limpiar inputs */
+function limpiarInputs(){
+    document.getElementById("nodos").value = "";
+    document.getElementById("nodosIngresados").value = "";
+    document.getElementById("files").value = "";
+    document.getElementById("list").value = "";
+    document.getElementById("myInput").value = "";
+    document.getElementById("ver").value = "";
+    document.getElementById("eu").value = "";
+    document.getElementById("eu2").value = "";
+
+    let campos = arregloImages.length;
+    for (let i = 0; i < campos; i++) {
+        arregloImages.pop(); 
+        if(arregloImages.length === 1){
+            arregloImages.shift();
+        }
+    }
+    let campos2 = arregloTxt.length;
+    for (let i = 0; i < campos2; i++) {
+        arregloTxt.pop(); 
+        if(arregloTxt.length === 1){
+            arregloTxt.shift();
+        }
+    }
+    console.log(arregloTxt.length);
+    console.log(arregloImages);
+    console.log(arregloTxt);
+}
+
+/* Tipos de funciones
+
+const capturaValorInputFlecha = () => {
     let valoresNodos = document.getElementById("nodos").value;
     document.getElementById("nodosIngresados").innerHTML = valoresNodos;
 };
@@ -55,6 +87,7 @@ function funcionEstandar() {
     document.getElementById("nodosIngresados").innerHTML = valoresNodos;
 } */
 
+/* Arreglo de ruta de imágenes*/
 const arregloImages = [];
 
 function cargueImagenes(eventoSeleccionar){
@@ -76,10 +109,10 @@ function cargueImagenes(eventoSeleccionar){
                     '<img class="thumb" width="100px" heigth="100px" id="eu" src="', imagen.target.result, ' "title=" ', escape(imagenSeleccionada.name), ' "/> '
                 ].join('');
 
-                //Arreglo con el título de la imagen
+                /* Esta línea llena con cada iteración el array con el nombre 
+                de las imágenes añadidas */ 
                 arregloImages.push(escape(imagenSeleccionada.name));
 
-                //console.log(document.getElementById('list').insertBefore(span, null));
                 document.getElementById('list').insertBefore(span, null);
             };
         })(f);
@@ -98,7 +131,6 @@ let input = myInput;
 let infoArchivo = new FileReader;
 input.addEventListener('change', onChange);
 
-let txt;
 /* Cargue del archivo */
 function onChange(event){
     /* event es el evento de selección */
@@ -109,18 +141,20 @@ function onChange(event){
     infoArchivo.readAsText(archivo);
     /* Permite ejecutar la función onload después de cargar el archivo */
     infoArchivo.onload = onLoad;
-    txt = event.target.files[0].name;
 }
 
-/* Lectura del contenido del archivo */
-
+/* Arreglo en el que se almacena cada línea
+ de un archivo de texto que seleccione */
 const arregloTxt = [];
+
+/* Lectura del contenido del archivo */
 function onLoad(){
     let contenidoTxt = infoArchivo.result;
     let lecturaLineaPorLinea = contenidoTxt.split('\n');
     let contenido = '';
     contenido += lecturaLineaPorLinea;
-    
+
+    /* Ciclo que llena el arreglo con las líneas de texto */
     for (let i = 0; i < lecturaLineaPorLinea.length; i++) {
         lecturaLineaPorLinea[i]; 
         arregloTxt.push(lecturaLineaPorLinea[i]);
@@ -130,14 +164,21 @@ function onLoad(){
     document.getElementById('ver').innerHTML = contenido;
 }
 
+
+/* Arreglo en el que se almacenan todas 
+las imágenes que tiene la lista */
+const arregloImagesGeneral = [];
+
 /* Dividir una cadena e ingresar valores del input
 enlaces de imagen y el txt. */
 function añadirNodosCampos(){
     var cadena = document.getElementById("nodos").value;
     var separa = cadena.split(",");
     for (let i = 0; i < separa.length; i++) {
-        var cadena = separa[i];
-        instClass.añadirNodoF(cadena);  
+        if(separa[i] != ""){
+            var cadena = separa[i];
+            instClass.añadirNodoF(cadena); 
+        } 
     }
     for (let i = 0; i < arregloImages.length; i++){
         instClass.añadirNodoF(arregloImages[i]);
@@ -145,9 +186,156 @@ function añadirNodosCampos(){
     for (let i = 0; i < arregloTxt.length; i++){
         instClass.añadirNodoF(arregloTxt[i]);
     }
+    console.log(separa);
+    console.log(arregloImages);
+    console.log(arregloTxt);
     instClass.imprimirArrayList();
+
+    /* Ciclo que va llenando poco a poco el arreglo general 
+    de imágenes que se van agregando cada vez que se 
+    actualiza la lista */
+    for (let i = 0; i < arregloImages.length; i++) {
+        arregloImagesGeneral.push(arregloImages[i]);
+    }
+
 }
 
+/* Función que muestra las imágenes temporalmente mientras 
+se actualizan estas mismas*/
+function imagenes(){
+    document.getElementById("imagenes").innerHTML = ""; 
+
+    for (let i = 0; i < arregloImagesGeneral.length; i++) {
+        let img = new Image();
+        img.src = "img/"+arregloImagesGeneral[i];
+        img.width = "150";
+        img.height = "100";
+        document.getElementById("imagenes").appendChild(img);
+    }
+}
+
+function opciones() {
+    let seleccion = document.getElementById("functionSelected").value;
+    
+    if ((seleccion === "1") && (document.getElementById("aggInicio").checked)){
+        document.getElementById("nodoPorDefault").innerHTML = "";
+        instClass.añadirNodoI(document.getElementById("valorN").value);
+        instClass.imprimirArrayList();
+        document.getElementById("valorN").value = "";
+        document.getElementById("posicionN").value = "";
+    }else if((seleccion === "1") && (document.getElementById("aggFinal").checked)){
+        document.getElementById("nodoPorDefault").innerHTML = "";
+        instClass.añadirNodoF(document.getElementById("valorN").value);
+        instClass.imprimirArrayList();
+        document.getElementById("valorN").value = "";
+        document.getElementById("posicionN").value = "";
+    }else if((seleccion === "2") && (document.getElementById("aggInicio").checked)){
+        document.getElementById("nodoPorDefault").innerHTML = "";
+        /* instClass.eliminarNodoI(); */
+        let eNI = instClass.eliminarNodoI().valor;
+
+        /* Ciclo que elimina la imagen del array general 
+        que se vaya removiendo de la lista */
+        for (let i = 0; i < arregloImagesGeneral.length; i++) {
+            if(eNI == arregloImagesGeneral[i]){
+                let indice = arregloImagesGeneral.indexOf(arregloImagesGeneral[i]); 
+                arregloImagesGeneral.splice(indice, 1);
+            }
+        }
+
+        instClass.imprimirArrayList();
+        document.getElementById("valorN").value = "";
+        document.getElementById("posicionN").value = "";
+    }else if((seleccion === "2") && (document.getElementById("aggFinal").checked)){
+        document.getElementById("nodoPorDefault").innerHTML = "";
+        /* instClass.eliminarNodoF(); */
+        let eNF = instClass.eliminarNodoF().valor;
+        
+        /* Ciclo que elimina la imagen del array general 
+        que se vaya removiendo de la lista */
+        for (let i = 0; i < arregloImagesGeneral.length; i++) {
+            if(eNF == arregloImagesGeneral[i]){
+                let indice = arregloImagesGeneral.indexOf(arregloImagesGeneral[i]); 
+                arregloImagesGeneral.splice(indice, 1);
+            }
+        } 
+
+        instClass.imprimirArrayList();
+
+        document.getElementById("valorN").value = "";
+        document.getElementById("posicionN").value = "";
+    }else if((seleccion === "3")){
+        document.getElementById("nodoPorDefault").innerHTML = "";
+        instClass.imprimirArrayGetPosicion(instClass.getPosicionPuntero(parseInt(document.getElementById("posicionN").value)).valor)
+        document.getElementById("valorN").value = "";
+        document.getElementById("posicionN").value = "";
+    }else if((seleccion === "4")){
+        document.getElementById("nodoPorDefault").innerHTML = "";
+        /* instClass.removerNodoPorPosicion(parseInt(document.getElementById("posicionN").value)); */
+        let rNPP = instClass.removerNodoPorPosicion(parseInt(document.getElementById("posicionN").value));
+
+        /* Ciclo que elimina la imagen del array general 
+        que se vaya removiendo de la lista */
+        for (let i = 0; i < arregloImagesGeneral.length; i++) {
+            if(rNPP == arregloImagesGeneral[i]){
+                var indice = arregloImagesGeneral.indexOf(arregloImagesGeneral[i]); 
+                arregloImagesGeneral.splice(indice, 1);
+            }
+        } 
+
+        instClass.imprimirArrayList();
+        console.log(instClass);
+        document.getElementById("valorN").value = "";
+        document.getElementById("posicionN").value = "";
+    }else if((seleccion === "5")){
+        document.getElementById("nodoPorDefault").innerHTML = "";
+
+        let mVN = instClass.getPosicionPuntero(parseInt(document.getElementById("posicionN").value)).valor;
+        instClass.modificarValorNodo(parseInt(document.getElementById("posicionN").value), document.getElementById("valorN").value); 
+        
+        /* Ciclo que elimina la imagen del array general 
+        que se vaya modificando de la lista */
+        for (let i = 0; i < arregloImagesGeneral.length; i++) {
+            if(mVN == arregloImagesGeneral[i]){
+                var indice = arregloImagesGeneral.indexOf(arregloImagesGeneral[i]);
+                arregloImagesGeneral.splice(indice, 1);
+            }
+        }
+        
+        instClass.imprimirArrayList();
+        console.log(instClass);
+        document.getElementById("valorN").value = "";
+        document.getElementById("posicionN").value = "";
+    }else if((seleccion === "6")){
+        document.getElementById("nodoPorDefault").innerHTML = "";
+        instClass.insertarNodoPorPosicion(document.getElementById("valorN").value, parseInt(document.getElementById("posicionN").value));
+        instClass.imprimirArrayList();
+        document.getElementById("valorN").value = "";
+        document.getElementById("posicionN").value = "";
+    }else if((seleccion === "7")){
+        document.getElementById("nodoPorDefault").innerHTML = "";
+        instClass.invertirNodos();
+        instClass.imprimirArrayList();
+        console.log(instClass); 
+        document.getElementById("valorN").value = "";
+        document.getElementById("posicionN").value = "";
+    }else{
+        document.getElementById("nodoPorDefault").innerHTML = "";
+        document.getElementById("valorN").value = "";
+        document.getElementById("posicionN").value = "";
+        alert("¡Vuelve a verificar la información!")
+    }
+}
+
+/* Creamos un objeto imagen utilizando el método createElement()
+let nodo = document.createElement("img");
+img.src = "";
+document.getElementById("body").appendChild(nodo);
+Acceder a un objeto imagen
+let imagenNodo = document.getElementById("myImg");
+ Agregar texto de la imagen
+down.innerHTML = "Nombre de la imagen";
+*/
 
 class NodeClass {
 
@@ -162,7 +350,8 @@ class listasSimples {
             this.head = null;
             this.tail = null;
             this.length = 0;
-        }
+    }
+    
     /* Métodos de la lista: añadir, eliminar, buscar, actualizar valor */
     añadirNodoF(valor) {
         /* Instancia de la clase NodeClass */
@@ -170,7 +359,7 @@ class listasSimples {
         if (!this.head) {
             this.head = newNode;
             this.tail = this.head;
-        } else {
+        }else{
             this.tail.next = newNode;
             this.tail = newNode;
         }
@@ -224,9 +413,7 @@ class listasSimples {
         if (index < 0 || index >= this.length) return null;
         let contadorPuntero = 0;
         let nodoVisitado = this.head;
-        let nodoAnteriorAlVisitado;
         while(contadorPuntero !== index){
-            /* nodoAnteriorAlVisitado = nodoVisitado */
             nodoVisitado = nodoVisitado.next;
             contadorPuntero++;
         }
@@ -235,9 +422,14 @@ class listasSimples {
 
     modificarValorNodo(index, valor) {
         let encontrarNodo = this.getPosicionPuntero(index);
+        let aux = encontrarNodo;
         if (encontrarNodo) {
             encontrarNodo.valor = valor;
-            return true;
+
+            /* Este return se tuvo que modificar 
+            para que diera resultado la impresión
+             de las imágenes que hay en la lista */
+            return aux;
         }
         return false;
     }
@@ -257,10 +449,6 @@ class listasSimples {
         this.length--;
         return nodoVisitad.valor;
     }
-
-    /* Implementar función para llamar método según selección del user en la lista desplegable */
-    /* Crear lista simple a partir de los valores ingresados por el usuario, 
-    en la opción por default y del campo input */
 
     insertarNodoPorPosicion(valor, index) {
         let newNode = new NodeClass(valor);
@@ -299,18 +487,18 @@ class listasSimples {
     /* Implementar método reverse (invertir nodos de la lista) */
     invertirNodos() {
         if(!this.head) return false;
-        let node = this.head;
+        let nodoVisitado = this.head;
         this.head = this.tail;
-        this.tail = node;
+        this.tail = nodoVisitado;
 
-        let prev = null;
+        let nodoAnteriorAlVisitado = null;
         let next;
 
         for (let i = 0; i < this.length-1; i++) {
-            next = node.next;
-            node.next = prev;
-            prev = node;
-            node = next;
+            next = nodoVisitado.next;
+            nodoVisitado.next = nodoAnteriorAlVisitado;
+            nodoAnteriorAlVisitado = nodoVisitado;
+            nodoVisitado = next;
         }
         return true;
     }
@@ -323,6 +511,7 @@ class listasSimples {
             nodoVisitado = nodoVisitado.next;
         }
         document.getElementById("listaPorDefault").innerHTML = arregloNodos;
+        document.getElementById("listaCreada").innerHTML = arregloNodos;
     }
 
     imprimirArrayGetPosicion(nodoBuscado){
@@ -345,76 +534,7 @@ instClass.removerNodoPorPosicion(1); /* Elimina nodo con valor 3 */
 instClass.insertarNodoPorPosicion("Nuevo nodo", 0);
 instClass.removerNodoPorValor(3);
 console.log(instClass);
-/* instClass.eliminarNodoI();
-instClass.eliminarNodoF(); 
-instClass.modificarValorNodo(1, "Dos");*/
-instClass.imprimirArrayList();
-/* instClass.invertirNodos();
-console.log(instClass); */
 
-function opciones() {
-    let seleccion = document.getElementById("functionSelected").value;
-    
-    if ((seleccion === "1") && (document.getElementById("aggInicio").checked)){
-        document.getElementById("nodoPorDefault").innerHTML = "";
-        instClass.añadirNodoI(document.getElementById("valorN").value);
-        instClass.imprimirArrayList();
-        document.getElementById("valorN").value = "";
-        document.getElementById("posicionN").value = "";
-    }else if((seleccion === "1") && (document.getElementById("aggFinal").checked)){
-        document.getElementById("nodoPorDefault").innerHTML = "";
-        instClass.añadirNodoF(document.getElementById("valorN").value);
-        instClass.imprimirArrayList();
-        document.getElementById("valorN").value = "";
-        document.getElementById("posicionN").value = "";
-    }else if((seleccion === "2") && (document.getElementById("aggInicio").checked)){
-        document.getElementById("nodoPorDefault").innerHTML = "";
-        instClass.eliminarNodoI();
-        instClass.imprimirArrayList();
-        document.getElementById("valorN").value = "";
-        document.getElementById("posicionN").value = "";
-    }else if((seleccion === "2") && (document.getElementById("aggFinal").checked)){
-        document.getElementById("nodoPorDefault").innerHTML = "";
-        instClass.eliminarNodoF();
-        instClass.imprimirArrayList();
-        document.getElementById("valorN").value = "";
-        document.getElementById("posicionN").value = "";
-    }else if((seleccion === "3")){
-        document.getElementById("nodoPorDefault").innerHTML = "";
-        instClass.imprimirArrayGetPosicion(instClass.getPosicionPuntero(parseInt(document.getElementById("posicionN").value)).valor)
-        document.getElementById("valorN").value = "";
-        document.getElementById("posicionN").value = "";
-    }else if((seleccion === "4")){
-        document.getElementById("nodoPorDefault").innerHTML = "";
-        instClass.removerNodoPorPosicion(parseInt(document.getElementById("posicionN").value));
-        instClass.imprimirArrayList();
-        console.log(instClass);
-        document.getElementById("valorN").value = "";
-        document.getElementById("posicionN").value = "";
-    }else if((seleccion === "5")){
-        document.getElementById("nodoPorDefault").innerHTML = "";
-        instClass.modificarValorNodo(parseInt(document.getElementById("posicionN").value), document.getElementById("valorN").value);
-        instClass.imprimirArrayList();
-        console.log(instClass);
-        document.getElementById("valorN").value = "";
-        document.getElementById("posicionN").value = "";
-    }else if((seleccion === "6")){
-        document.getElementById("nodoPorDefault").innerHTML = "";
-        instClass.insertarNodoPorPosicion(document.getElementById("valorN").value, parseInt(document.getElementById("posicionN").value));
-        instClass.imprimirArrayList();
-        document.getElementById("valorN").value = "";
-        document.getElementById("posicionN").value = "";
-    }else if((seleccion === "7")){
-        document.getElementById("nodoPorDefault").innerHTML = "";
-        instClass.invertirNodos();
-        instClass.imprimirArrayList();
-        console.log(instClass); 
-        document.getElementById("valorN").value = "";
-        document.getElementById("posicionN").value = "";
-    }else{
-        document.getElementById("nodoPorDefault").innerHTML = "";
-        document.getElementById("valorN").value = "";
-        document.getElementById("posicionN").value = "";
-        alert("¡Vuelve a verificar la información!")
-    }
-}
+instClass.imprimirArrayList();
+
+

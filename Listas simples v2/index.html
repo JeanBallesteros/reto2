@@ -61,7 +61,7 @@
 
                             <!-- Muestra el nombre de las imágenes seleccionadas -->
                             <div class="file-path-wrapper">
-                                <input type="text" class="file-path validate">
+                                <input type="text" id="eu2" class="file-path validate">
                             </div>
                         </div>
                     
@@ -80,7 +80,7 @@
                                 <input type="file" id="myInput">
                             </div>
                             <div class="file-path-wrapper">
-                                <input type="text" class="file-path validate">
+                                <input type="text" id="eu" class="file-path validate">
                             </div>
                         </div>
                         
@@ -98,9 +98,20 @@
         <!-- Sección del botón -->
         <div class="section">
             <div class="row center">
-                <div class="col s12">
+                <div class="col s6">
                     <button onclick="añadirNodosCampos()" class="btn waves-effect waves-light btn-large">Crear lista</button>
                 </div>
+
+                <div class="col s6">
+                    <button onclick="limpiarInputs()" class="btn waves-effect waves-light btn-large">Limpiar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección Lista Creada -->
+        <div class="section">
+            <div class="row center">
+                <output id="listaCreada"></output>
             </div>
         </div>
 
@@ -151,17 +162,28 @@
         <!-- Sección del aceptar y mostrar lista resultante -->
         <div class="section">
             <div class="row center">
-                <div class="col s12">
+                <div class="col s6">
                     <button class="btn waves-effect waves-light btn-large" onclick="opciones()">Ver lista resultante</button>
+                </div>
+                <div class="col s6">
+                    <button class="btn waves-effect waves-light btn-large" onclick="imagenes()">Ver imágenes de la lista</button>
                 </div>
             </div>
         </div>
 
-        <!--  -->
+        <!-- Sección -->
         <div class="section">
             <div class="row center">
                 <div class="col s12">
                     <output id="nodoPorDefault"></output>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección -->
+        <div class="section">
+            <div class="row center">
+                <div class="col s12" id="imagenes">
                 </div>
             </div>
         </div>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body id="body">
+
+    <output id="p1"></output>
+    <output id="img"></output>
+    <div id="divI"></div>
+
+    <button onclick="mostrarImagen()">Cargar imagen</button>
+    <script>
+        /* Crear elemento parrafo dentro del DOM */
+        let tag = document.createElement("p");
+        /* Le insertamos texto al tag parrafo creado */
+        let mostrarTexto = document.createTextNode("Hola mundo");
+        tag.appendChild(mostrarTexto);
+        /* Indicamos en que parte del DOM se va a ubicar el elemento creado "p" */
+        let tag1 = document.getElementById("p1");
+        tag1.appendChild(tag);
+
+        
+
+        function mostrarImagen() {
+            //const imagenOutput = document.createElement("img");
+            //imagenOutput.id = "1";
+
+            let img = new Image();
+            //var img = document.createElement("img");
+            img.src = "https://image.freepik.com/vector-gratis/gente-negocios-trabajando-desarrollo-computadoras-portatiles_1262-18907.jpg";
+
+            document.getElementById("divI").appendChild(img);
+            //document.getElementById("1").innerHTML = "Hola";
+            //console.log(imagenOutput.hasAttribute("id"));
+            console.log(img);
+            //console.log(imagenOutput);
+        }
+    </script>
+</body>
+
+</html>
